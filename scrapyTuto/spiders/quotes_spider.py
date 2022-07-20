@@ -21,4 +21,4 @@ class QuotesSpider(scrapy.Spider):
                 'text': quote.css('span.text::text').get(),
                 'author': quote.css('small.author::text').get(),
                 'tags': tags,
-            }
+                }
