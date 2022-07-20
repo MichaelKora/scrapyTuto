@@ -14,9 +14,11 @@ class QuotesSpider(scrapy.Spider):
 
     def parse(self, response):
         
-        page = response.url.split("/")[-2]
-        print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! response-{page} is : {response}")
-        filename = f'quotes-{page}.html'
-        with open(filename, 'wb') as f:
-            f.write(response.body)
-        self.log(f'Saved file {filename}')
+        for quote in response.css("div.quote"):
+            tags = quote.css("div.tags a.tag::text").getall()
+            if "thinking" or "inspirational" in tags:
+                yield {
+                'text': quote.css('span.text::text').get(),
+                'author': quote.css('small.author::text').get(),
+                'tags': tags,
+            }
