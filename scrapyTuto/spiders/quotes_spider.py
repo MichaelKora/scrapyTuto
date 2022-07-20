@@ -16,7 +16,9 @@ class QuotesSpider(scrapy.Spider):
         
         for quote in response.css("div.quote"):
             tags = quote.css("div.tags a.tag::text").getall()
-            if "thinking" or "inspirational" in tags:
+            check =  any(item in ["thinking","inspirational"] for item in tags)
+            
+            if  check:
                 yield {
                 'text': quote.css('span.text::text').get(),
                 'author': quote.css('small.author::text').get(),
